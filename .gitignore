@@ -1,0 +1,15 @@
+# Ignore environment variable files
+backend/server/.env
+
+# Ignore node_modules (Frontend)
+frontend/node_modules/
+
+# Ignore .zed (Frontend)
+frontend/.zed/
+
+# Ignore .next folder
+frontend/.next/
+
+# Backend specific
+backend/server/__pycache__/
+backend/server/.ropeproject/
