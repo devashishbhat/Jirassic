@@ -1,5 +1,6 @@
 import SignOut from "@/components/SignOut";
 import TaskCard from "@/components/TaskCard";
+import Link from "next/link";
 
 export default function Dashboard() {
   
@@ -11,9 +12,11 @@ export default function Dashboard() {
         <TaskCard />
 
         {/* Upload button at the end of the task list */}
-        <button className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold px-6 py-3 rounded-lg shadow-lg hover:from-blue-600 hover:to-indigo-700 hover:scale-105 transform transition duration-300 ease-in-out absolute bottom-0 right-0 mb-6 mr-6">
-          📤 Upload
-        </button>
+        <Link href={"/file-upload"}>
+            <button className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold px-6 py-3 rounded-lg shadow-lg hover:from-blue-600 hover:to-indigo-700 hover:scale-105 transform transition duration-300 ease-in-out absolute bottom-0 right-0 mb-6 mr-6">
+            📤 Upload
+          </button>
+        </Link>
       </div>
     </div>
   );

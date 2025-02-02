@@ -1,12 +1,19 @@
 "use client";
 
 import SignOut from "@/components/SignOut";
+import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+interface RequestBody {
+  content: string
+}
+
 export default function FileUpload () {
     const [file, setFile] = useState<File | null>(null);
+    const [transcription, setTranscription] = useState("");
+    const [loading, setLoading] = useState(false);
 
     const router = useRouter();
     
@@ -17,13 +24,39 @@ export default function FileUpload () {
         }
     }
 
-    const handleUpload = () => {
+    const handleUpload = async () => {
         if (!file) {
             alert("Please select a file first!");
             return;
           }
           // TODO: send the file to a server
           console.log(file.name);
+
+          setLoading(true);
+          const formData = new FormData();
+          formData.append("file", file);
+          try {
+            const response = await axios.post('http://127.0.0.1:5000/transcribe', formData, {
+              headers: {
+                'Content-Type': 'multipart/form-data'
+              }
+            });
+
+            const generated_transcript = response.data.transcription;
+            console.log("generated-transcript: ", generated_transcript);
+            setTranscription(generated_transcript);
+
+            const dataBody: RequestBody = {
+              content: transcription
+            }
+            
+            const response_task = await axios.post("http://0.0.0.0:4050/user/generate-task", dataBody);
+            console.log(response_task.data);
+          } catch (error) {
+            alert("Failed to connect to server.");
+          } finally {
+            setLoading(false);
+          }
           router.push("/dashboard");
     }
 
@@ -49,9 +82,10 @@ export default function FileUpload () {
           />
           <button
             onClick={handleUpload}
+            disabled={loading}
             className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
           >
-            Upload File
+            Submit
           </button>
         </div>
         </div>
