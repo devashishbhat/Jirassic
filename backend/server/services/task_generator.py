@@ -27,7 +27,8 @@ Also, consider the team member's expertise when assigning tasks:
 The total assigned story points for each team member should be less the maximum allowed story points which is 24.
 In a case where the total assigned stry points are going to go above the threshold which is 24, then assign the user story to a different team member with similar expertise.
 
-Please assign each task to the appropriate team member, and provide the result as a JSON object with two attributes: "team_member_name" and "task_assigned" and "story points" estimation that task.
+Please assign each task to the appropriate team member, and provide the result strictly as JSON object with only three attributes and nothing more than the following three: "team_member_name", "task_assigned" and "story points" estimation for that task.
+Strictly do not add even a single letter other than mentioned above in the output , neither before nor after the required outout.
 """
 
 prompt = PromptTemplate(
@@ -35,10 +36,10 @@ prompt = PromptTemplate(
     template=template
 )
 
-def assign_tasks_from_transcript(transcript : str):
+async def assign_tasks_from_transcript(transcript : str):
     # Step 5: Create the VertexAI LLM instance
     vertex_ai_llm = VertexAI(
-        model_name="gemini-1.0-pro",
+        model_name="gemini-1.5-pro",
         project=PROJECT_ID,
         location=LOCATION,
         max_output_tokens=256,
