@@ -1,4 +1,4 @@
-from models.user import User, UserRegister
+from models.user import User, UserRegister, UserLogin
 from services.database import get_database
 from fastapi import HTTPException, status, Depends
 from pymongo import MongoClient
@@ -40,10 +40,38 @@ async def register_user_service(userObject: UserRegister, db: MongoClient = Depe
         return {
             "message": "User registered successfully",
             "status": 200
-            }
+        }
 
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Error registering user: {str(e)}"
+        )
+
+async def login_user_service(userObject: UserLogin, db: MongoClient = Depends(get_database)):
+    try:
+        users_collection = db.user_details
+        existing_user = users_collection.find_one({"email": userObject.email})
+        if existing_user:
+            password_verification = verify_password(userObject.password, existing_user["password_hash"])
+            if password_verification:
+                return {
+                    "message": "Login successful",
+                    "status": 200
+                }
+            
+            return {
+                "message": "Wrong Password",
+                "status": 400
+            }
+        
+        return {
+            "message": "Please register yourself first",
+            "status": 400
+        }
+
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error loging user: {str(e)}"
         )
