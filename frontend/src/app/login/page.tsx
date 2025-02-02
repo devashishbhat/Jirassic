@@ -8,7 +8,7 @@ interface RequestBody {
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-// import axios from "axios";
+import axios from "axios";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -27,7 +27,9 @@ export default function Login() {
       email,
       password,
     };
-    // const response = await axios.post("http://localhost:4050/authenticate-login", userData);
+    const response = await axios.post("http://localhost:4050/user/login", userData);
+
+    console.log(response);
 
     if (true) {
       //status code = 200
