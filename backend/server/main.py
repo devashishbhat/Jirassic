@@ -8,6 +8,11 @@ from contextlib import asynccontextmanager
 
 app = FastAPI()
 
+# origins = [
+#     "http://localhost:3000",  # Allow frontend on localhost:3000
+#     "http://127.0.0.1:3000",  # Allow frontend on 127.0.0.1:3000
+# ]
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # "*" allows all domains, or specify a list of allowed domains

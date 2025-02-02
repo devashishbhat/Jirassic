@@ -1,4 +1,5 @@
 from models.user import User, UserRegister, UserLogin
+from models.task import Task
 from services.database import get_database
 from fastapi import HTTPException, status, Depends
 from pymongo import MongoClient
@@ -57,6 +58,11 @@ async def login_user_service(userObject: UserLogin, db: MongoClient = Depends(ge
             if password_verification:
                 return {
                     "message": "Login successful",
+                    "userData": {
+                        "id": existing_user["id"],
+                        "name": existing_user["full_name"],
+                        "role": existing_user["role"],
+                    },
                     "status": 200
                 }
             
@@ -75,3 +81,33 @@ async def login_user_service(userObject: UserLogin, db: MongoClient = Depends(ge
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Error loging user: {str(e)}"
         )
+
+async def get_user_dictionary():
+    db = await get_database()
+    user_collection = db.user_details
+    user_mapping = {}
+    users = user_collection.find({}, {"full_name": 1, "id": 1})
+
+    for user in users:
+        user_mapping[user["full_name"]] = user["id"]  # full_name -> user_id
+
+    return user_mapping
+
+async def get_user_task(userId: int, db: MongoClient = Depends(get_database)):
+    try:
+        task_details = db.task_details
+        if userId==1:
+            tasks = task_details.find()
+        else:
+            tasks = task_details.find({"user_id": userId})
+        task_list = [Task(**task) for task in tasks]
+        if not task_list:
+            return {
+                "status":400,
+                "message": "No task are assigned to you right now!"
+            }
+        
+        return task_list
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error fetching tasks: {str(e)}")

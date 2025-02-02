@@ -14,15 +14,16 @@ async def generate_task_and_save(transcript: transcriptRequestBody, db: MongoCli
 
     # Get the task from LLM
     generate_task_by_llm = await assign_tasks_from_transcript(transcript)
-    
+    print("Generated Tasks: ", generate_task_by_llm)
+
     # Convert the task string to a JSON list
     parseable_task = convert_to_json(generate_task_by_llm)
-    # print("Generated Tasks: ", parseable_task)
+    print("Generated parseable Tasks: ", parseable_task)
 
     # Creating list of all the task according to Task schema
     final_task_list = process_tasks(parseable_task, user_dictionary)
-    # for task in final_task_list:
-    #     print(task)
+    for task in final_task_list:
+        print(task)
     
     try:
         task_collection = db.task_details
@@ -50,7 +51,7 @@ async def generate_task_and_save(transcript: transcriptRequestBody, db: MongoCli
 def convert_to_json(data_str: str):
     # Parse the string into a Python object (list of dictionaries)
     try:
-        modified_string = data_str.replace("json", "")
+        modified_string = data_str.replace("```json", "")
         data_json = json.loads(modified_string)
         return data_json
     except json.JSONDecodeError as e:
@@ -59,6 +60,9 @@ def convert_to_json(data_str: str):
 def process_tasks(ai_generated_tasks: List[dict], user_dictionary: dict) -> List[Task]:
     processed_tasks = []
     task_counter = 1  # Unique task ID counter
+
+    print("AI Generated Task List: ", ai_generated_tasks)
+    print("AI Generated Task List: ", type(ai_generated_tasks))
 
     for task in ai_generated_tasks:
         user_name = task["team_member_name"]
