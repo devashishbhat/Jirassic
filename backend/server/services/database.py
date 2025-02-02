@@ -12,7 +12,7 @@ import os
 async def get_database():
     """Dependency function to access the database in routes."""
     # mongo_uri = os.getenv("MONGO_URI")
-    mongo_uri = "mongodb+srv://testUser:testUser123@ticketgenerator.o9p58.mongodb.net/"
+    mongo_uri = "YOUR MONGO DB URI STRING"
     client = MongoClient(mongo_uri)
 
     db = client.da_hack
