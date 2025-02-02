@@ -2,9 +2,11 @@ import os
 import tempfile
 import whisper
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
+CORS(app)
 
 # Initialize the whisper model
 model = whisper.load_model("base")
