@@ -8,34 +8,30 @@ interface RequestBody {
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useUser } from "@/context/UserContext";
 import axios from "axios";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { setUser } = useUser();
 
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    //------------------------
-    //TODO: remove the console in final update
-    //------------------------
-    console.log(`Email: ${email}`); // Logging the data for debug
     const userData: RequestBody = {
       email,
       password,
     };
-    const response = await axios.post("http://localhost:4050/user/login", userData);
+    const { data } = await axios.post("http://localhost:4050/user/login", userData);
+    setUser(data.userData)
 
-    console.log(response);
-
-    if (true) {
-      //status code = 200
+    if (data.status == 200 && data.userData.role == "manager") {
       router.push("/dashboard");
+    } else if(data.status == 200 && data.userData.role == "member") {
+      router.push("/task-details");
     } else {
-      //status code = 400
       router.push("/login");
     }
   };

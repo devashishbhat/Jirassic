@@ -57,7 +57,8 @@ export default function FileUpload () {
           } finally {
             setLoading(false);
           }
-          router.push("/dashboard");
+          router.push("/task-details");
+          // router.push("/dashboard");
     }
 
     return (

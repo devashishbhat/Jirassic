@@ -1,11 +1,14 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useUser } from "@/context/UserContext";
 
 export default function SignOut() {
   const router = useRouter();
+  const { setUser } = useUser();
 
   function signOut() {
+    setUser(null);
     router.push("/login");
   }
   return (
