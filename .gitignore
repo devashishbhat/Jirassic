@@ -1,6 +1,17 @@
 # Ignore environment variable files
 backend/server/.env
 
+# Ignoring virtual environment
+backend/venv
+backend/whisper-server/.venv-whisper
+
+# Ignore __pycache__ files
+backend/server/__pycache__
+backend/whisper-server/__pycache__
+
+# Ignore .ropeproject files
+backend/server/.ropeproject
+
 # Ignore node_modules (Frontend)
 frontend/node_modules/
 
