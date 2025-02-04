@@ -1,0 +1,6 @@
+flask
+pymongo
+pydantic
+dnspython
+flask-bcrypt
+flask_cors
