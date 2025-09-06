@@ -81,4 +81,4 @@ python app.py
 
 ## Contact
 ### For any inquiries or support, reach out via GitHub issues or contact us at:
-- devashishbhat11.aj@gmail.com
+- devashishbhat11@gmail.com
